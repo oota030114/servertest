@@ -1,0 +1,71 @@
+<html>
+    <head>
+        <title>eelテスト</title>
+        <link rel="stylesheet" href="./style.css">
+        <link rel="icon" href="data:,">
+    </head>
+    <body>
+        <h2>eelテスト</h2>
+        <tr>
+            <td> 検索ワード：</td>
+            <td><input type="text" id=textData name="searchWord" size="30" maxlength="20"></td>
+            <td><button id="search" type="button" name="searchBtn" value="searchBtnValue">検索</button></td>
+        </tr>
+
+        <p>
+            <tr>
+                <td> 保存場所：　</td>
+                <td><input type="text" id=textFolder name="saveFolder" size="30" maxlength="500"></td>
+            </tr>
+        </p>
+
+        <p>
+            <label for="kekka">検索結果</label><br>
+            <div class="FlexTextarea">
+                <div class="FlexTextarea__dummy" aria-hidden="true"></div>
+                <textarea id="kekka" class="FlexTextarea__textarea"></textarea>
+            </div>
+        </p>
+
+        <script type="text/javascript" src="./eel.js"></script>
+        <script>
+            /*検索ボタン押下（search←ID）*/
+            search.addEventListener('click', () => {
+                if(textData.value=="" || textFolder.value==""){
+                    alert("未入力項目があります！");
+                }else{
+                    eel.kimetsu_search(textData.value, textFolder.value);
+                }
+            });
+
+            eel.expose(view_log_js)
+            function view_log_js(sourcejson){
+                try {
+                    str='';
+                    arrayJason = sourcejson.split(',');
+                    Object.keys(arrayJason).forEach(data => {
+                        if(str==''){
+                            str = arrayJason[data];
+                        }else{
+                            str = str + '\n' + arrayJason[data];
+                        }
+                    })
+                    kekka.value=str;
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+
+            /*el: DOM要素（≒ページ）*/
+            function flexTextarea(el) {
+                const dummy = el.querySelector('.FlexTextarea__dummy')
+                /*テキストエリア入力*/
+                el.querySelector('.FlexTextarea__textarea').addEventListener('input', e => {
+                    dummy.textContent = e.target.value + '\u200b';
+                })
+            }
+            /*ヒットしたセレクタを全て取得*/
+            document.querySelectorAll('.FlexTextarea').forEach(flexTextarea);
+        </script>
+    </body>
+</html>
